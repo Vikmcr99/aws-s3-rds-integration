@@ -5,11 +5,11 @@ import br.com.vikmcr99.api.domain.coupon.CouponRequestDTO;
 import br.com.vikmcr99.api.domain.event.Event;
 import br.com.vikmcr99.api.repositories.CouponRepository;
 import br.com.vikmcr99.api.repositories.EventRepository;
+import br.com.vikmcr99.api.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.UUID;
@@ -19,22 +19,12 @@ import java.util.UUID;
 public class CouponController {
 
     @Autowired
-    private CouponRepository couponRepository;
+    private CouponService couponService;
 
-    @Autowired
-    private EventRepository eventRepository;
 
     @PostMapping
-    public Coupon addCouponToEvent(UUID eventId, CouponRequestDTO couponRequestDTO) {
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new IllegalArgumentException("Event not found"));
-
-        Coupon coupon = new Coupon();
-        coupon.setCode(couponRequestDTO.code());
-        coupon.setDiscount(couponRequestDTO.discount());
-        coupon.setValid(new Date(couponRequestDTO.valid()));
-        coupon.setEvent(event);
-
-        return couponRepository.save(coupon);
+    public ResponseEntity<Coupon> addCouponsToEvent(@PathVariable UUID eventId, @RequestBody CouponRequestDTO couponRequestDTO) {
+        return new ResponseEntity<>(couponService.addCouponToEvent(eventId, couponRequestDTO),HttpStatus.CREATED);
     }
 
 
