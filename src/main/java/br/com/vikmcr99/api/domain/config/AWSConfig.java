@@ -1,5 +1,6 @@
 package br.com.vikmcr99.api.domain.config;
 
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,10 @@ public class AWSConfig {
 
     @Bean
     public AmazonS3 amazonS3Instance() {
-        return AmazonS3ClientBuilder.standard().withRegion(awsRegion).build();
+        return AmazonS3ClientBuilder.standard().
+                withCredentials(new DefaultAWSCredentialsProviderChain()).
+                withRegion(awsRegion).
+                build();
     }
 
 }
