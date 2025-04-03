@@ -1,5 +1,6 @@
 package br.com.vikmcr99.api.domain.event;
 
+import br.com.vikmcr99.api.domain.adress.Adress;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,5 +28,8 @@ public class Event {
     private String eventUrl;
     private Boolean remote;
     private Date date;
+
+    @OneToOne(mappedBy = "event", cascade = CascadeType.ALL)
+    private Adress adress;
 
 }
